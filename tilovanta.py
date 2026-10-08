@@ -38,12 +38,12 @@ def run(stdscr,seed):
         else:
             for y in range(10):
                 for x in range(10):
-                    p=x,y;v='@' if p==g.pos else 'X' if p==g.finish else g.board[p];text(stdscr,4+y,5+x*4,'['+v+']',4 if v=='X' else 3 if v=='!' else 1 if v=='@' else 2)
+                    p=x,y;v='@' if p==g.pos else 'X' if p==g.finish else g.board[p];text(stdscr,4+y,(w-40)//2+x*4,'['+v+']',4 if v=='X' else 3 if v=='!' else 1 if v=='@' else 2, v in ('@','X'))
             text(stdscr,15,2,message)
         stdscr.refresh();k=stdscr.getch()
         if k==ord('q'):return
         if k==ord('r'):g=Game(seed);jump=False
-        elif k==ord('j'):jump=not jump
+        elif k==ord('j') and not g.dead and not g.won:jump=not jump
         elif h>=18 and w>=58:
             d={curses.KEY_UP:(0,-1),ord('w'):(0,-1),curses.KEY_DOWN:(0,1),ord('s'):(0,1),curses.KEY_LEFT:(-1,0),ord('a'):(-1,0),curses.KEY_RIGHT:(1,0),ord('d'):(1,0)}.get(k)
             if d:g.move(*d,jump=jump);jump=False
@@ -53,6 +53,6 @@ def main():
     if a.demo:
         g=Game(a.seed);print('TILOVANTA\n'+ '\n'.join(''.join('@' if (x,y)==g.pos else 'X' if (x,y)==g.finish else g.board[x,y] for x in range(10)) for y in range(10)));return
     try:curses.wrapper(run,a.seed)
-    except curses.error:print('Needs an interactive curses terminal (58x18 minimum).')
+    except curses.error:print('Needs an interactive curses terminal (58x18 minimum).');return 2
     except KeyboardInterrupt:pass
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(main())
