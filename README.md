@@ -1,6 +1,6 @@
 # Tilovanta
 
-Offline terminal turn-based tile path puzzle. Version 1.0.0. Original terminal artwork; no account, desktop or telemetry. No assets or names taken from other games.
+Offline terminal turn-based tile path puzzle. Version 1.0.1. Original terminal artwork; no account, desktop or telemetry. No assets or names taken from other games.
 
 ## Install and run
 
@@ -20,3 +20,5 @@ For tests:
     python3 -m unittest -v
 
 8 core tests plus actual Linux PTY visual/input smoke. Linux tested; physical Raspberry Pi and non-Linux untested. Without curses the interactive game is unavailable. No paid features. games category marker line3; older stores still list/launch it. MIT license; see LICENSE.txt.
+
+1.0.1: terminal initialization failure returns error status rather than false success. Centered tile board, bold player/finish, jump key ignored after win/loss. Core game rules unchanged.
