@@ -8,15 +8,6 @@ class Game:
         self.rng=random.Random(seed);self.pos=(0,9);self.finish=(9,0);self.moves=0;self.dead=False;self.won=False;self.board={}
         # Guaranteed reachable stair path, all other tiles are randomized.
         self.path={(0,9)};x,y=0,9
-"""Tilovanta: turn-based tile path with gaps and jump hazards."""
-import argparse,curses,random,collections
-from terminal_ui import setup,text,title
-class Game:
-    size=10
-    def __init__(self,seed=None):
-        self.rng=random.Random(seed);self.pos=(0,9);self.finish=(9,0);self.moves=0;self.dead=False;self.won=False;self.board={}
-        # Guaranteed reachable stair path, all other tiles are randomized.
-        self.path={(0,9)};x,y=0,9
         while x<9 or y>0:
             if x<9 and (y==0 or self.rng.randrange(2)):x+=1
             else:y-=1
