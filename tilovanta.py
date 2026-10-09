@@ -8,6 +8,15 @@ class Game:
         self.rng=random.Random(seed);self.pos=(0,9);self.finish=(9,0);self.moves=0;self.dead=False;self.won=False;self.board={}
         # Guaranteed reachable stair path, all other tiles are randomized.
         self.path={(0,9)};x,y=0,9
+"""Tilovanta: turn-based tile path with gaps and jump hazards."""
+import argparse,curses,random,collections
+from terminal_ui import setup,text,title
+class Game:
+    size=10
+    def __init__(self,seed=None):
+        self.rng=random.Random(seed);self.pos=(0,9);self.finish=(9,0);self.moves=0;self.dead=False;self.won=False;self.board={}
+        # Guaranteed reachable stair path, all other tiles are randomized.
+        self.path={(0,9)};x,y=0,9
         while x<9 or y>0:
             if x<9 and (y==0 or self.rng.randrange(2)):x+=1
             else:y-=1
@@ -36,10 +45,13 @@ def run(stdscr,seed):
         h,w=stdscr.getmaxyx()
         if h<18 or w<58:text(stdscr,4,2,'Resize to 58x18. Board retained.',3)
         else:
+            cw=max(4,(w-4)//10);rh=max(1,(h-8)//10);left=(w-cw*10)//2
             for y in range(10):
                 for x in range(10):
-                    p=x,y;v='@' if p==g.pos else 'X' if p==g.finish else g.board[p];text(stdscr,4+y,(w-40)//2+x*4,'['+v+']',4 if v=='X' else 3 if v=='!' else 1 if v=='@' else 2, v in ('@','X'))
-            text(stdscr,15,2,message)
+                    p=x,y;v='@' if p==g.pos else 'X' if p==g.finish else g.board[p]
+                    for dy in range(rh):text(stdscr,4+y*rh+dy,left+x*cw,'['+(' '*max(1,cw-3))+']',4 if v=='X' else 3 if v=='!' else 2)
+                    text(stdscr,4+y*rh+rh//2,left+x*cw+cw//2,v,4 if v=='X' else 3 if v=='!' else 1 if v=='@' else 2,v in ('@','X'))
+            text(stdscr,h-3,2,message)
         stdscr.refresh();k=stdscr.getch()
         if k==ord('q'):return
         if k==ord('r'):g=Game(seed);jump=False
